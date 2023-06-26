@@ -1,5 +1,18 @@
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bridge?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    username: root
+    password: ${DB_PW}
+  jpa:
+    database: mysql
+    show-sql: true #hibernate가 실행한 모든 sql 출력
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        ddl-auto: true
+        format-sql: true #sql 문 beautify
 
 # Swagger springdoc-ui Configuration
 springdoc:
