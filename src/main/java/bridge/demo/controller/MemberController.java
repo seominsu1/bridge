@@ -11,7 +11,7 @@ public class MemberController {
 
 	@GetMapping("/save")
 	public String save() {
-		return "savetest";
+		return "membersave";
 	}
 
 	@PostMapping("/save")
