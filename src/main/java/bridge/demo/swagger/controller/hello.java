@@ -19,10 +19,4 @@ public class hello {
 		return "hello";
 	}
 
-	@Operation(summary = "hello 출력", description = "hello 출력메소드")
-	@GetMapping("/{name}")
-	public String test(@PathVariable("name") String name) {
-		return "hello";
-	}
-
 }
