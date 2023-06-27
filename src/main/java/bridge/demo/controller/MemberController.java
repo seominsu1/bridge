@@ -12,8 +12,10 @@ import bridge.demo.domain.Member;
 import bridge.demo.dto.MemberForm;
 import bridge.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
@@ -34,8 +36,13 @@ public class MemberController {
 			.email(form.getEmail())
 			.created(LocalDate.now().toString())
 			.build();
-		memberService.save(member);
-		model.addAttribute("member_id", member.getMemberId());
-		return "member/success";
+		try {
+			memberService.save(member);
+			model.addAttribute("member_id", member.getMemberId());
+			return "member/success";
+		} catch (IllegalStateException e) {
+			log.info(e.getMessage());
+			return "member/fail";
+		}
 	}
 }

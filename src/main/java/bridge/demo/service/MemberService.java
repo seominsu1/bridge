@@ -1,5 +1,7 @@
 package bridge.demo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +19,21 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 
 	@Transactional
-	public Long save(Member member) {
+	public Long save(Member member) throws IllegalStateException {
+		try {
+			validateDuplicatedId(member);
+		} catch (IllegalStateException e) {
+			log.info(e.getMessage());
+			throw e;
+		}
 		memberRepository.save(member);
 		return member.getId();
+	}
+
+	private void validateDuplicatedId(Member member) {
+		List<Member> members = memberRepository.findByEmail(member.getEmail());
+		if (!members.isEmpty()) {
+			throw new IllegalStateException("이미 가입된 회원입니다");
+		}
 	}
 }
