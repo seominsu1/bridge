@@ -12,7 +12,6 @@ public class helloController {
 
 	@GetMapping("/{name}")
 	public String printName(@PathVariable("name") String name, Model model) {
-
 		model.addAttribute("name", name);
 		return "hello";
 	}
