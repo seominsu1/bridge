@@ -30,4 +30,10 @@ public class MemberRepository {
 			.setParameter("email", email)
 			.getResultList();
 	}
+
+	public List<Member> findById(String memberId) {
+		return em.createQuery("select m from Member m where m.memberId = :memberId", Member.class)
+			.setParameter("memberId", memberId)
+			.getResultList();
+	}
 }

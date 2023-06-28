@@ -31,9 +31,13 @@ public class MemberService {
 	}
 
 	private void validateDuplicatedId(Member member) {
-		List<Member> members = memberRepository.findByEmail(member.getEmail());
-		if (!members.isEmpty()) {
-			throw new IllegalStateException("이미 가입된 회원입니다");
+
+		List<Member> membersEmail = memberRepository.findByEmail(member.getEmail());
+		List<Member> membersId = memberRepository.findById(member.getMemberId());
+		if (!membersEmail.isEmpty()) {
+			throw new IllegalStateException("이미 가입된 회원입니다.");
+		} else if (!membersId.isEmpty()) {
+			throw new IllegalStateException("중복된 ID 입니다.");
 		}
 	}
 }

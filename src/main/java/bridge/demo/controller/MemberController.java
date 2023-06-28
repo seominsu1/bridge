@@ -42,7 +42,9 @@ public class MemberController {
 			return "member/success";
 		} catch (IllegalStateException e) {
 			log.info(e.getMessage());
+			model.addAttribute("message", e.getMessage());
 			return "member/fail";
 		}
 	}
+
 }
