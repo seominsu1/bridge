@@ -47,4 +47,10 @@ public class MemberController {
 		}
 	}
 
+	@GetMapping("/login")
+	public String loginForm(Model model) {
+		model.addAttribute("memberForm", new MemberForm());
+		return "member/loginForm";
+	}
+
 }
