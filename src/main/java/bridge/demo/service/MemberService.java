@@ -30,6 +30,17 @@ public class MemberService {
 		return member.getId();
 	}
 
+	public Member findOne(String memberId) {
+		List<Member> member = memberRepository.findById(memberId);
+		return member.get(0);
+	}
+
+	@Transactional
+	public Member login(String memberId) {
+
+		return null;
+	}
+
 	private void validateDuplicatedId(Member member) {
 
 		List<Member> membersEmail = memberRepository.findByEmail(member.getEmail());

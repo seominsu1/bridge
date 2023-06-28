@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import bridge.demo.domain.Member;
-import bridge.demo.dto.MemberForm;
+import bridge.demo.dto.MemberFormDto;
+import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +25,12 @@ public class MemberController {
 
 	@GetMapping("/save")
 	public String saveForm(Model model) {
-		model.addAttribute("memberForm", new MemberForm());
+		model.addAttribute("memberForm", new MemberFormDto());
 		return "member/saveForm";
 	}
 
 	@PostMapping("/save")
-	public String memberSave(MemberForm form, Model model) {
+	public String memberSave(MemberFormDto form, Model model) {
 		Member member = new Member().builder()
 			.memberId(form.getMemberId())
 			.password(form.getPassword())
@@ -49,8 +50,25 @@ public class MemberController {
 
 	@GetMapping("/login")
 	public String loginForm(Model model) {
-		model.addAttribute("memberForm", new MemberForm());
+		model.addAttribute("memberForm", new MemberFormDto());
 		return "member/loginForm";
+	}
+
+	@PostMapping("/login-post")
+	public String login(MemberLoginDto loginDto, Model model) {
+		Member member = new Member().builder()
+			.memberId(loginDto.getMemberId())
+			.password(loginDto.getPassword())
+			.build();
+		try {
+			memberService.login("아직");
+			model.addAttribute("member_id", member.getMemberId());
+			return "hello";
+		} catch (IllegalStateException e) {
+			log.info(e.getMessage());
+			model.addAttribute("message", e.getMessage());
+			return "member/loginForm";
+		}
 	}
 
 }
