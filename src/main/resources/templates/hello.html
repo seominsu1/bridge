@@ -6,6 +6,8 @@
 </head>
 <body>
 <p th:text="'hello. ' + ${member_id}"></p>
-<a href="/member/logout">로그아웃</a>
+<form th:action="@{/logout}" , method="post">
+    <button>로그아웃</button>
+</form>
 </body>
 </html>

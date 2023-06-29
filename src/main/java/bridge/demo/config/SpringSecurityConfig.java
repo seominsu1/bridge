@@ -1,11 +1,11 @@
 package bridge.demo.config;
 
-import static org.springframework.security.config.Customizer.*;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import jakarta.servlet.DispatcherType;
@@ -17,7 +17,7 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(request -> request
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/member/save").permitAll()
+				.requestMatchers("/member/save", "/").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin(login -> login
@@ -28,8 +28,13 @@ public class SpringSecurityConfig {
 				.defaultSuccessUrl("/hello", true)
 				.permitAll()
 			)
-			.logout(withDefaults());
+			.logout(Customizer.withDefaults());
 
 		return http.build();
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import bridge.demo.domain.Member;
 import bridge.demo.dto.MemberFormDto;
-import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,21 +53,20 @@ public class MemberController {
 		return "member/loginForm";
 	}
 
-	@PostMapping("/login-post")
-	public String login(MemberLoginDto loginDto, Model model) {
-		Member member = new Member().builder()
-			.memberId(loginDto.getMemberId())
-			.password(loginDto.getPassword())
-			.build();
-		try {
-			memberService.login("아직");
-			model.addAttribute("member_id", member.getMemberId());
-			return "hello";
-		} catch (IllegalStateException e) {
-			log.info(e.getMessage());
-			model.addAttribute("message", e.getMessage());
-			return "member/loginForm";
-		}
-	}
-
+	// @PostMapping("/login-post")
+	// public String login(MemberLoginDto loginDto, Model model) {
+	// 	Member member = new Member().builder()
+	// 		.memberId(loginDto.getMemberId())
+	// 		.password(loginDto.getPassword())
+	// 		.build();
+	// 	try {
+	// 		memberService.login("아직");
+	// 		model.addAttribute("member_id", member.getMemberId());
+	// 		return "hello";
+	// 	} catch (IllegalStateException e) {
+	// 		log.info(e.getMessage());
+	// 		model.addAttribute("message", e.getMessage());
+	// 		return "member/loginForm";
+	// 	}
+	// }
 }
