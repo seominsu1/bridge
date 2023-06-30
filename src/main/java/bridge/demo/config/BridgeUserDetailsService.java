@@ -30,7 +30,7 @@ public class BridgeUserDetailsService implements UserDetailsService {
 
 		return User.builder()
 			.username(member.getMemberId())
-			.password(passwordEncoder.encode(member.getPassword()))
+			.password(member.getPassword())
 			.build();
 	}
 }

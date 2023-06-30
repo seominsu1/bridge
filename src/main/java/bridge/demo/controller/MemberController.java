@@ -1,18 +1,21 @@
 package bridge.demo.controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import bridge.demo.domain.Member;
 import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
+import bridge.demo.dto.UnregisterResDto;
 import bridge.demo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final MemberService memberService;
-	private final BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/save")
 	public String saveForm(Model model) {
@@ -34,10 +36,9 @@ public class MemberController {
 
 	@PostMapping("/save")
 	public String memberSave(@ModelAttribute("MemberFormDto") MemberFormDto form, Model model) {
-		String encodedPw = passwordEncoder.encode(form.getPassword());
 		Member member = new Member().builder()
 			.memberId(form.getMemberId())
-			.password(encodedPw)
+			.password(form.getPassword())
 			.email(form.getEmail())
 			.created(LocalDate.now().toString())
 			.build();
@@ -56,5 +57,27 @@ public class MemberController {
 	public String loginForm(Model model) {
 		model.addAttribute("MemberLoginDto", new MemberLoginDto());
 		return "member/loginForm";
+	}
+
+	@GetMapping("/unregister")
+	public String unregisterForm() {
+		return "member/unregister";
+	}
+
+	@PostMapping("/unregister")
+	public String unregisterForm(@RequestParam String password, Principal principal, Model model) {
+		Member member = new Member().builder()
+			.memberId(principal.getName())
+			.password(password)
+			.build();
+		UnregisterResDto resDto = memberService.unregister(member);
+		if (resDto.getStatus() == 200) {
+			SecurityContextHolder.clearContext();
+			return "redirect:/";
+		} else {
+			model.addAttribute("message", resDto.getMessage());
+			return "member/unregisterFail";
+		}
+
 	}
 }

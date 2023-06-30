@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import bridge.demo.domain.Member;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -35,5 +36,10 @@ public class MemberRepository {
 		return em.createQuery("select m from Member m where m.memberId = :memberId", Member.class)
 			.setParameter("memberId", memberId)
 			.getResultList();
+	}
+
+	public void unregister(Long id) {
+		Query query = em.createQuery("delete m from Member m where m.id = :id", Member.class).setParameter("id", id);
+		query.executeUpdate();
 	}
 }

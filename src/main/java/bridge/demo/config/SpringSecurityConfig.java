@@ -15,7 +15,7 @@ import jakarta.servlet.DispatcherType;
 public class SpringSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(request -> request
+		http.csrf().disable().authorizeHttpRequests(request -> request
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 				.requestMatchers("/member/save", "/").permitAll()
 				.anyRequest().authenticated()
