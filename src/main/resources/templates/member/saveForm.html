@@ -6,20 +6,20 @@
 </head>
 <body>
 <h1> member save test 입니다. </h1>
-<form th:action="@{/member/save}" th:object="${memberForm}" method="post">
+<form th:action="@{/member/save}" th:object="${MemberFormDto}" method="post">
     <table class="table">
         <tbody>
         <tr>
             <td> id</td>
-            <td><input type="text" th:field="*{memberId}"></td>
+            <td><input type="text" th:field="*{memberId}" id="memberId"></td>
         </tr>
         <tr>
             <td> password</td>
-            <td><input type="text" th:field="*{password}"></td>
+            <td><input type="text" th:field="*{password}" id="password"></td>
         </tr>
         <tr>
             <td> email</td>
-            <td><input type="text" th:field="*{email}"></td>
+            <td><input type="text" th:field="*{email}" id="email"></td>
         </tr>
         </tbody>
     </table>
