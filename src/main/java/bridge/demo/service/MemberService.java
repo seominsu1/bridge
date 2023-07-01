@@ -43,6 +43,7 @@ public class MemberService {
 		return null;
 	}
 
+	@Transactional
 	public UnregisterResDto unregister(Member member) {
 		UnregisterResDto resDto = new UnregisterResDto();
 		List<Member> memberList = memberRepository.findById(member.getMemberId());

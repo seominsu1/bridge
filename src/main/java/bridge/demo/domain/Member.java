@@ -1,7 +1,5 @@
 package bridge.demo.domain;
 
-import org.springframework.util.Assert;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,9 +34,6 @@ public class Member {
 
 	@Builder
 	public Member(String memberId, String password, String email, String token, String created) {
-		Assert.hasText(memberId, "memberId must not be empty");
-		Assert.hasText(password, "password must not be empty");
-		Assert.hasText(email, "email must not be empty");
 		this.memberId = memberId;
 		this.password = password;
 		this.email = email;

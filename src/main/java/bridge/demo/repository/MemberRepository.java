@@ -39,7 +39,8 @@ public class MemberRepository {
 	}
 
 	public void unregister(Long id) {
-		Query query = em.createQuery("delete m from Member m where m.id = :id", Member.class).setParameter("id", id);
+
+		Query query = em.createQuery("delete from Member m where m.id = :id").setParameter("id", id);
 		query.executeUpdate();
 	}
 }
