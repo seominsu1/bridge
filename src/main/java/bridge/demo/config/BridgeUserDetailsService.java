@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import bridge.demo.domain.Member;
@@ -16,11 +15,10 @@ import bridge.demo.service.MemberService;
 public class BridgeUserDetailsService implements UserDetailsService {
 
 	private final MemberService memberService;
-	private final PasswordEncoder passwordEncoder;
 
-	public BridgeUserDetailsService(MemberService memberService, PasswordEncoder passwordEncoder) {
+	public BridgeUserDetailsService(MemberService memberService) {
 		this.memberService = memberService;
-		this.passwordEncoder = passwordEncoder;
+
 	}
 
 	@Override

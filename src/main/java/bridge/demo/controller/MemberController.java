@@ -9,10 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import bridge.demo.domain.Member;
+import bridge.demo.dto.LoginResDto;
 import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.dto.UnregisterResDto;
@@ -57,6 +59,16 @@ public class MemberController {
 	public String loginForm(Model model) {
 		model.addAttribute("MemberLoginDto", new MemberLoginDto());
 		return "member/loginForm";
+	}
+
+	@PostMapping("/login-post")
+	public String login(@RequestBody MemberLoginDto loginDto, Model model) {
+
+		String memberId = loginDto.getMemberId();
+		String password = loginDto.getPassword();
+		LoginResDto loginResDto = memberService.login(memberId, password);
+		model.addAttribute("LoginResDto", loginResDto);
+		return "hello";
 	}
 
 	@GetMapping("/unregister")
