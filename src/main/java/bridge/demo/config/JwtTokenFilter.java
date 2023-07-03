@@ -13,10 +13,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @Component
-@Slf4j
+@Log4j2
 public class JwtTokenFilter extends GenericFilterBean {
 
 	private JwtTokenProvider provider;

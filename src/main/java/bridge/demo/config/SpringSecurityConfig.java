@@ -13,7 +13,9 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import bridge.demo.dto.TokenInfo;
 import jakarta.servlet.DispatcherType;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @EnableWebSecurity
 @Configuration
 public class SpringSecurityConfig {
@@ -44,24 +46,24 @@ public class SpringSecurityConfig {
 				.usernameParameter("memberId")    // [C] submit할 아이디
 				.passwordParameter("password")    // [D] submit할 비밀번호
 				.defaultSuccessUrl("/hello", true)
-
-				.successHandler((request, response, auth) -> {  //로그인 성공시 행동을 정의 합니다.
+				.successHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
 					String user_id = auth.getName();
 
-					System.out.println("login ok : " + ip + "" + user_id);
+					log.info("login ok : " + ip + " " + user_id);
 
 					response.setCharacterEncoding("UTF-8");
-					response.setHeader("Content-Type", "application/download; UTF-8");
+					response.setHeader("Content-Type", "application/json; UTF-8");
 					TokenInfo token = provider.tokenProvide(auth);
 					response.getWriter().write("{\"result\" : \"" + token + "\" }");
-					System.out.println("response : " + response);
+					response.sendRedirect("/hello");
+					log.info("response : " + response);
 				})
-				.failureHandler((request, response, auth) -> {  //로그인 실패시 행동을 정의 합니다.
+				.failureHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
 					String user_id = request.getParameter("username");
 
-					System.out.println("login fail : " + ip + "" + user_id);
+					log.info("login fail : " + ip + " " + user_id);
 
 					response.sendRedirect("/");
 				})
