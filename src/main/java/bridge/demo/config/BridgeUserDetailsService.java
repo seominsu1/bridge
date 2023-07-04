@@ -9,21 +9,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import bridge.demo.domain.Member;
-import bridge.demo.service.MemberService;
+import bridge.demo.repository.MemberRepository;
 
 @Component
 public class BridgeUserDetailsService implements UserDetailsService {
 
-	private final MemberService memberService;
+	private final MemberRepository memberRepository;
 
-	public BridgeUserDetailsService(MemberService memberService) {
-		this.memberService = memberService;
+	public BridgeUserDetailsService(MemberRepository memberRepository) {
+		this.memberRepository = memberRepository;
 
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String insertedUserId) throws UsernameNotFoundException {
-		Optional<Member> findOne = Optional.ofNullable(memberService.findOne(insertedUserId));
+		Optional<Member> findOne = Optional.ofNullable(memberRepository.findById(insertedUserId));
 		Member member = findOne.orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다."));
 
 		return User.builder()

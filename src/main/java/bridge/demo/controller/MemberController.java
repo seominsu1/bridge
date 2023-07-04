@@ -61,12 +61,11 @@ public class MemberController {
 
 	// @PostMapping("/login-post")
 	// public String login(@RequestBody MemberLoginDto loginDto, Model model) {
-	//
 	// 	String memberId = loginDto.getMemberId();
 	// 	String password = loginDto.getPassword();
 	// 	LoginResDto loginResDto = memberService.login(memberId, password);
 	// 	model.addAttribute("LoginResDto", loginResDto);
-	// 	return "hello";
+	// 	return "loginResDto";
 	// }
 
 	@GetMapping("/unregister")

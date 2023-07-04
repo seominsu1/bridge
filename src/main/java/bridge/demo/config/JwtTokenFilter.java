@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class JwtTokenFilter extends GenericFilterBean {
 
-	private JwtTokenProvider provider;
+	private final JwtTokenProvider provider;
 
 	public JwtTokenFilter(JwtTokenProvider provider) {
 		this.provider = provider;
@@ -29,8 +29,9 @@ public class JwtTokenFilter extends GenericFilterBean {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws
 		IOException,
 		ServletException {
-
+		log.info("토큰 확인 시작==================================");
 		String token = resolveToken((HttpServletRequest)request);
+		log.info("토큰==================================" + token);
 		//유효한 토큰인지 확인
 		if (token != null && provider.tokenCheck(token)) {
 			// 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
@@ -44,10 +45,14 @@ public class JwtTokenFilter extends GenericFilterBean {
 	}
 
 	private String resolveToken(HttpServletRequest request) {
+		log.info("request header authorization==================================" + request.getHeader(
+			provider.HttpHeaderInputValue));
 		String bearerToken = request.getHeader(provider.HttpHeaderInputValue);
+		
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
 			return bearerToken.substring(7);
 		}
 		return null;
 	}
+
 }

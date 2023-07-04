@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import bridge.demo.dto.TokenInfo;
 import jakarta.servlet.DispatcherType;
@@ -20,8 +19,8 @@ import lombok.extern.log4j.Log4j2;
 @Configuration
 public class SpringSecurityConfig {
 
-	JwtTokenProvider provider;
-	JwtTokenFilter filter;
+	private final JwtTokenProvider provider;
+	private final JwtTokenFilter filter;
 
 	public SpringSecurityConfig(JwtTokenProvider provider, JwtTokenFilter filter) {
 		this.provider = provider;
@@ -30,8 +29,6 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
-		requestCache.setMatchingRequestParameterName("continue");
 		http.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
@@ -41,10 +38,10 @@ public class SpringSecurityConfig {
 				.anyRequest().authenticated()
 			)
 			.formLogin(login -> login
-				.loginPage("/member/login")    // [A] 커스텀 로그인 페이지 지정
-				.loginProcessingUrl("/member/login-post")    // [B] submit 받을 url
-				.usernameParameter("memberId")    // [C] submit할 아이디
-				.passwordParameter("password")    // [D] submit할 비밀번호
+				.loginPage("/member/login")
+				.loginProcessingUrl("/member/login-post")
+				.usernameParameter("memberId")
+				.passwordParameter("password")
 				.defaultSuccessUrl("/hello", true)
 				.successHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
@@ -55,9 +52,10 @@ public class SpringSecurityConfig {
 					response.setCharacterEncoding("UTF-8");
 					response.setHeader("Content-Type", "application/json; UTF-8");
 					TokenInfo token = provider.tokenProvide(auth);
-					response.getWriter().write("{\"result\" : \"" + token + "\" }");
-					response.sendRedirect("/hello");
-					log.info("response : " + response);
+					response.setHeader("Authorization", "Bearer " + token.getAccessToken());
+
+					log.info("authorization : " + response.getHeader("Authorization"));
+
 				})
 				.failureHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
@@ -70,7 +68,6 @@ public class SpringSecurityConfig {
 				.permitAll()
 			)
 			.logout(Customizer.withDefaults());
-
 		return http.build();
 	}
 
