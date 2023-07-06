@@ -32,13 +32,17 @@ public class Member {
 	@Column(name = "created")
 	private String created;
 
+	@Column(name = "role")
+	private String role;
+
 	@Builder
-	public Member(String memberId, String password, String email, String token, String created) {
+	public Member(String memberId, String password, String email, String token, String created, String role) {
 		this.memberId = memberId;
 		this.password = password;
 		this.email = email;
 		this.token = token;
 		this.created = created;
+		this.role = role;
 	}
 
 	public Member() {

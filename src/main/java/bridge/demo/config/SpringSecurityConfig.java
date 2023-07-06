@@ -10,7 +10,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import bridge.demo.dto.TokenInfo;
 import jakarta.servlet.DispatcherType;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,9 +21,13 @@ public class SpringSecurityConfig {
 	private final JwtTokenProvider provider;
 	private final JwtTokenFilter filter;
 
-	public SpringSecurityConfig(JwtTokenProvider provider, JwtTokenFilter filter) {
+	private final CustomSuccessHandler customSuccessHandler;
+
+	public SpringSecurityConfig(JwtTokenProvider provider, JwtTokenFilter filter,
+		CustomSuccessHandler customSuccessHandler) {
 		this.provider = provider;
 		this.filter = filter;
+		this.customSuccessHandler = customSuccessHandler;
 	}
 
 	@Bean
@@ -35,28 +38,30 @@ public class SpringSecurityConfig {
 			.authorizeHttpRequests(request -> request
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
 				.requestMatchers("/member/save", "/").permitAll()
+				.requestMatchers("/hello").hasAnyRole("USER", "ADMIN")
 				.anyRequest().authenticated()
 			)
 			.formLogin(login -> login
 				.loginPage("/member/login")
-				.loginProcessingUrl("/member/login-post")
+				.loginProcessingUrl("/login-post")
 				.usernameParameter("memberId")
 				.passwordParameter("password")
-				.defaultSuccessUrl("/hello", true)
-				.successHandler((request, response, auth) -> {
-					String ip = request.getRemoteAddr();
-					String user_id = auth.getName();
-
-					log.info("login ok : " + ip + " " + user_id);
-
-					response.setCharacterEncoding("UTF-8");
-					response.setHeader("Content-Type", "application/json; UTF-8");
-					TokenInfo token = provider.tokenProvide(auth);
-					response.setHeader("Authorization", "Bearer " + token.getAccessToken());
-
-					log.info("authorization : " + response.getHeader("Authorization"));
-
-				})
+				.defaultSuccessUrl("/hello").permitAll()
+				.successHandler(customSuccessHandler)
+				// .successHandler((request, response, auth) -> {
+				// 	String ip = request.getRemoteAddr();
+				// 	String user_id = auth.getName();
+				//
+				// 	log.info("login ok : " + ip + " " + user_id);
+				//
+				// 	response.setCharacterEncoding("UTF-8");
+				// 	response.setHeader("Content-Type", "application/json; UTF-8");
+				// 	TokenInfo token = provider.tokenProvide(auth);
+				// 	response.setHeader("Authorization", "Bearer " + token.getAccessToken());
+				//
+				// 	log.info("authorization : " + response.getHeader("Authorization"));
+				//
+				// })
 				.failureHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
 					String user_id = request.getParameter("username");

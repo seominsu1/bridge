@@ -41,6 +41,7 @@ public class MemberController {
 			.password(form.getPassword())
 			.email(form.getEmail())
 			.created(LocalDate.now().toString())
+			.role("USER")
 			.build();
 		try {
 			memberService.save(member);

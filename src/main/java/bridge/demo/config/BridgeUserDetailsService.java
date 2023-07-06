@@ -29,6 +29,7 @@ public class BridgeUserDetailsService implements UserDetailsService {
 		return User.builder()
 			.username(member.getMemberId())
 			.password(member.getPassword())
+			.roles(member.getRole())
 			.build();
 	}
 }
