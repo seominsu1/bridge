@@ -23,8 +23,22 @@ public class SpringSecurityConfig {
 	private final CustomLoginSuccessHandler customLoginSuccessHandler;
 
 	private final CustomLogoutHandler customLogoutHandler;
-	// private static final ClearSiteDataHeaderWriter.Directive[] SOURCE =
-	// 	{CACHE, COOKIES, STORAGE, EXECUTION_CONTEXTS};
+
+	private static final String[] PERMIT_URL = {
+		"/member/save",
+		"/",
+		"/member/logout",
+		"/member/unregister",
+		/*
+		* swagger
+		* */
+		"/swagger-ui.html",
+		"/swagger-ui/**",
+		"/api/**",
+		"/v3/api-docs/**",
+		"/v2/api-docs/**",
+		"/swagger-resources/**"
+	};
 
 	public SpringSecurityConfig(JwtTokenProvider provider, JwtTokenFilter filter,
 		CustomLoginSuccessHandler customLoginSuccessHandler, CustomLogoutHandler customLogoutHandler) {
@@ -42,10 +56,14 @@ public class SpringSecurityConfig {
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(request -> request
-				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/member/save", "/", "/member/logout", "/member/unregister").permitAll()
-				.requestMatchers("/hello", "/member/unregister", "/member/logout").hasAnyRole("USER", "ADMIN")
-				.anyRequest().authenticated()
+				.dispatcherTypeMatchers(DispatcherType.FORWARD)
+				.permitAll()
+				.requestMatchers(PERMIT_URL)
+				.permitAll()
+				.requestMatchers("/hello", "/member/unregister", "/member/logout")
+				.hasAnyRole("USER", "ADMIN")
+				.anyRequest()
+				.authenticated()
 			)
 			.formLogin(login -> login
 				.loginPage("/member/login")
