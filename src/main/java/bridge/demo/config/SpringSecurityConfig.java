@@ -2,7 +2,6 @@ package bridge.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,24 +20,31 @@ public class SpringSecurityConfig {
 	private final JwtTokenProvider provider;
 	private final JwtTokenFilter filter;
 
-	private final CustomSuccessHandler customSuccessHandler;
+	private final CustomLoginSuccessHandler customLoginSuccessHandler;
+
+	private final CustomLogoutHandler customLogoutHandler;
+	// private static final ClearSiteDataHeaderWriter.Directive[] SOURCE =
+	// 	{CACHE, COOKIES, STORAGE, EXECUTION_CONTEXTS};
 
 	public SpringSecurityConfig(JwtTokenProvider provider, JwtTokenFilter filter,
-		CustomSuccessHandler customSuccessHandler) {
+		CustomLoginSuccessHandler customLoginSuccessHandler, CustomLogoutHandler customLogoutHandler) {
 		this.provider = provider;
 		this.filter = filter;
-		this.customSuccessHandler = customSuccessHandler;
+		this.customLoginSuccessHandler = customLoginSuccessHandler;
+		this.customLogoutHandler = customLogoutHandler;
 	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		// HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(
+		// 	new ClearSiteDataHeaderWriter(SOURCE));
 		http.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(request -> request
 				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/member/save", "/").permitAll()
-				.requestMatchers("/hello").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/member/save", "/", "/member/logout", "/member/unregister").permitAll()
+				.requestMatchers("/hello", "/member/unregister", "/member/logout").hasAnyRole("USER", "ADMIN")
 				.anyRequest().authenticated()
 			)
 			.formLogin(login -> login
@@ -46,8 +52,7 @@ public class SpringSecurityConfig {
 				.loginProcessingUrl("/login-post")
 				.usernameParameter("memberId")
 				.passwordParameter("password")
-				.defaultSuccessUrl("/hello").permitAll()
-				.successHandler(customSuccessHandler)
+				.successHandler(customLoginSuccessHandler)
 				// .successHandler((request, response, auth) -> {
 				// 	String ip = request.getRemoteAddr();
 				// 	String user_id = auth.getName();
@@ -72,7 +77,13 @@ public class SpringSecurityConfig {
 				})
 				.permitAll()
 			)
-			.logout(Customizer.withDefaults());
+			.logout((logout) ->
+				logout
+					.logoutUrl("/member/logout")
+					.logoutSuccessUrl("/member/login")
+					.addLogoutHandler(customLogoutHandler)
+					.logoutSuccessHandler((request, response, authentication) -> response.sendRedirect("/member/login"))
+			);
 		return http.build();
 	}
 

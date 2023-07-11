@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.dto.UnregisterResDto;
 import bridge.demo.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,6 +30,7 @@ import lombok.extern.log4j.Log4j2;
 public class MemberController {
 
 	private final MemberService memberService;
+	SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
 	@GetMapping("/save")
 	public String saveForm(Model model) {
@@ -69,19 +73,30 @@ public class MemberController {
 	// 	return "loginResDto";
 	// }
 
+	// @PostMapping("/logout")
+	// public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+	// 	this.logoutHandler.logout(request, response, authentication);
+	// 	return "redirect::/";
+	// }
+
 	@GetMapping("/unregister")
 	public String unregisterForm() {
 		return "member/unregister";
 	}
 
 	@PostMapping("/unregister")
-	public String unregisterForm(@RequestParam String password, Principal principal, Model model) {
+	public String unregisterForm(@RequestParam String password, Principal principal, Model model,
+		HttpServletResponse response) {
 		Member member = new Member().builder()
 			.memberId(principal.getName())
 			.password(password)
 			.build();
 		UnregisterResDto resDto = memberService.unregister(member);
 		if (resDto.getStatus() == 200) {
+			Cookie cookie = new Cookie("token", null);
+			cookie.setMaxAge(0);
+			cookie.setPath("/");
+			response.addCookie(cookie);
 			SecurityContextHolder.clearContext();
 			return "redirect:/";
 		} else {

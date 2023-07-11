@@ -8,20 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @Controller
-@Slf4j
+@Log4j2
 @RequestMapping("/hello")
 public class helloController {
 
 	@GetMapping
 	public String helloPage(Model model, HttpServletRequest request, Principal principal) {
 		String memberId = principal.getName();
-		log.debug("memberId={}", request.getParameter("memberId"));
-		log.debug("id={}", request.getParameter("id"));
-		log.debug("member_id={}", request.getParameter("member_id"));
-		log.debug("userId={}", request.getParameter("userId"));
+		log.info("memberId={}", principal.getName());
 		model.addAttribute("memberId", memberId);
 		return "hello";
 	}
