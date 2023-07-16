@@ -1,2 +1,8 @@
 spring:
-  datasource:
+  profiles:
+    active: local
+    include:
+      - datasource
+      - redis
+
+

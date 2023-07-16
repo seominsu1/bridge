@@ -1,0 +1,28 @@
+---
+spring.config.activate.on-profile: local
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: bridge
+---
+spring.config.activate.on-profile: dev
+spring:
+  data:
+    mongodb:
+      host:
+      port:
+      username:
+      password:
+      database:
+---
+spring.config.activate.on-profile: prod
+spring:
+  data:
+    mongodb:
+      host:
+      port:
+      username:
+      password:
+      database:
