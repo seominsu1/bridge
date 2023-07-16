@@ -18,6 +18,7 @@ import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.dto.UnregisterResDto;
 import bridge.demo.service.MemberService;
+import bridge.demo.swagger.controller.MemberApiSpec;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +28,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/member")
-public class MemberController {
+public class MemberController implements MemberApiSpec {
 
 	private final MemberService memberService;
 	SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
+	@Override
 	@GetMapping("/save")
 	public String saveForm(Model model) {
 		model.addAttribute("MemberFormDto", new MemberFormDto());

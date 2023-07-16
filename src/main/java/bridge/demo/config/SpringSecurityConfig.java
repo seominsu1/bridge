@@ -87,9 +87,9 @@ public class SpringSecurityConfig {
 				// })
 				.failureHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
-					String user_id = request.getParameter("username");
+					String userId = request.getParameter("username");
 
-					log.info("login fail : " + ip + " " + user_id);
+					log.info("login fail : " + ip + " " + userId);
 
 					response.sendRedirect("/");
 				})

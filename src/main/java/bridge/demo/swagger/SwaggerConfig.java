@@ -13,7 +13,7 @@ import io.swagger.v3.oas.models.info.Info;
 @Configuration
 public class SwaggerConfig {
 	@Bean
-	public OpenAPI openAPI() {
+	public OpenAPI openApi() {
 		Info info = new Info()
 			.title("[Bridge] API Documents")
 			.version("v0.0.1")

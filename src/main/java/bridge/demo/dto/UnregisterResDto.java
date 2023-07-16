@@ -10,5 +10,5 @@ public class UnregisterResDto {
 	private int status;
 
 	private String message;
-	
+
 }

@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "hello", description = "hello controller")
+@Tag(name = "Member", description = "Member Controller")
 @RestController
-@RequestMapping("/api/hello")
-public class hello {
+@RequestMapping("/member")
+public class HelloSpec {
 
 	@Operation(summary = "hello 출력", description = "hello 출력메소드")
 	@GetMapping("/{name}")

@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 @Controller
 @Log4j2
 @RequestMapping("/hello")
-public class helloController {
+public class HelloController {
 
 	@GetMapping
 	public String helloPage(Model model, HttpServletRequest request, Principal principal) {
