@@ -27,6 +27,6 @@ public interface MemberApiSpec {
 	String unregisterForm();
 
 	@Operation(summary = "회원탈퇴", description = "회원탈퇴 메소드")
-	public String unregisterForm(@RequestParam String password, Principal principal, Model model,
+	String unregisterForm(@RequestParam String password, Principal principal, Model model,
 		HttpServletResponse response);
 }

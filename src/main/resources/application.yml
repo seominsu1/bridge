@@ -16,7 +16,7 @@ spring:
 
 # Swagger springdoc-ui Configuration
 springdoc:
-  packages-to-scan: bridge.demo.swagger
+  packages-to-scan: bridge.demo
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:

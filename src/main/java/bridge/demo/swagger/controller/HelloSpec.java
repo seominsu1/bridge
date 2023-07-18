@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "Member", description = "Member Controller")
+// @Tag(name = "Member", description = "Member Controller")
 @RestController
 @RequestMapping("/member")
 public class HelloSpec {
