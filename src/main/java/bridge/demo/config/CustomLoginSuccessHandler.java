@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import bridge.demo.dto.TokenInfo;
 import jakarta.servlet.ServletException;
@@ -32,9 +31,6 @@ public class CustomLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
 		TokenInfo tokenInfo = provider.tokenProvide(authentication);
-		// response.setHeader("Authorization", "Bearer " + token.getAccessToken());
-		// String url = request.getHeader("Origin") + "/hello";
-		RestTemplate restTemplate = new RestTemplate();
 		String token = "Bearer " + tokenInfo.getAccessToken();
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", token);

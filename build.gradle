@@ -54,13 +54,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     //jwt token
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    //swagger start
+    //swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    //aws-parameter-store -> spring boot 3.1.0 버전 호환된 spring cloud release 안됨.
-//    implementation 'org.springframework.cloud:spring-cloud-starter-config'
-//    implementation 'org.springframework.cloud:spring-cloud-dependencies:2022.0.3'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config:2.2.6.RELEASE'
-    //swagger end
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'

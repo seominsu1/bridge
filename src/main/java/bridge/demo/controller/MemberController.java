@@ -66,21 +66,6 @@ public class MemberController implements MemberApiSpec {
 		return "member/loginForm";
 	}
 
-	// @PostMapping("/login-post")
-	// public String login(@RequestBody MemberLoginDto loginDto, Model model) {
-	// 	String memberId = loginDto.getMemberId();
-	// 	String password = loginDto.getPassword();
-	// 	LoginResDto loginResDto = memberService.login(memberId, password);
-	// 	model.addAttribute("LoginResDto", loginResDto);
-	// 	return "loginResDto";
-	// }
-
-	// @PostMapping("/logout")
-	// public String logout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
-	// 	this.logoutHandler.logout(request, response, authentication);
-	// 	return "redirect::/";
-	// }
-
 	@GetMapping("/unregister")
 	public String unregisterForm() {
 		return "member/unregister";

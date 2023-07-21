@@ -50,8 +50,6 @@ public class SpringSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		// HeaderWriterLogoutHandler clearSiteData = new HeaderWriterLogoutHandler(
-		// 	new ClearSiteDataHeaderWriter(SOURCE));
 		http.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
@@ -71,20 +69,6 @@ public class SpringSecurityConfig {
 				.usernameParameter("memberId")
 				.passwordParameter("password")
 				.successHandler(customLoginSuccessHandler)
-				// .successHandler((request, response, auth) -> {
-				// 	String ip = request.getRemoteAddr();
-				// 	String user_id = auth.getName();
-				//
-				// 	log.info("login ok : " + ip + " " + user_id);
-				//
-				// 	response.setCharacterEncoding("UTF-8");
-				// 	response.setHeader("Content-Type", "application/json; UTF-8");
-				// 	TokenInfo token = provider.tokenProvide(auth);
-				// 	response.setHeader("Authorization", "Bearer " + token.getAccessToken());
-				//
-				// 	log.info("authorization : " + response.getHeader("Authorization"));
-				//
-				// })
 				.failureHandler((request, response, auth) -> {
 					String ip = request.getRemoteAddr();
 					String userId = request.getParameter("username");
@@ -104,5 +88,4 @@ public class SpringSecurityConfig {
 			);
 		return http.build();
 	}
-
 }
