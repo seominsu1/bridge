@@ -72,7 +72,7 @@ public class MemberController implements MemberApiSpec {
 	}
 
 	@PostMapping("/unregister")
-	public String unregisterForm(@RequestParam String password, Principal principal, Model model,
+	public String unregisterMember(@RequestParam String password, Principal principal, Model model,
 		HttpServletResponse response) {
 		Member member = new Member().builder()
 			.memberId(principal.getName())
@@ -90,6 +90,5 @@ public class MemberController implements MemberApiSpec {
 			model.addAttribute("message", resDto.getMessage());
 			return "member/unregisterFail";
 		}
-
 	}
 }
