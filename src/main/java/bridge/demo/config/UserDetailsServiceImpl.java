@@ -12,11 +12,11 @@ import bridge.demo.domain.Member;
 import bridge.demo.repository.MemberRepository;
 
 @Component
-public class BridgeUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final MemberRepository memberRepository;
 
-	public BridgeUserDetailsService(MemberRepository memberRepository) {
+	public UserDetailsServiceImpl(MemberRepository memberRepository) {
 		this.memberRepository = memberRepository;
 
 	}
