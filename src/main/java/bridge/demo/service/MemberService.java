@@ -2,12 +2,10 @@ package bridge.demo.service;
 
 import java.util.List;
 
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import bridge.demo.config.JwtTokenProvider;
 import bridge.demo.domain.Member;
 import bridge.demo.dto.UnregisterResponseDto;
 import bridge.demo.repository.MemberRepository;
@@ -22,8 +20,6 @@ public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
-	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-	private final JwtTokenProvider provider;
 
 	@Transactional
 	public void save(Member member) throws IllegalStateException {
@@ -41,27 +37,6 @@ public class MemberService {
 		Member member = memberRepository.findById(memberId);
 		return member;
 	}
-
-	// @Transactional
-	// public LoginResDto login(String memberId, String password) {
-	// 	// 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-	// 	// 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-	// 	UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId,
-	// 		password);
-	//
-	// 	// 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-	// 	// authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-	// 	Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-	//
-	// 	// 3. 인증 정보를 기반으로 JWT 토큰 생성
-	// 	TokenInfo tokenInfo = provider.tokenProvide(authentication);
-	//
-	// 	return LoginResDto.builder()
-	// 		.accessToken(tokenInfo.getAccessToken())
-	// 		.tokenType(tokenInfo.getGrantType())
-	// 		.memberId(memberId)
-	// 		.build();
-	// }
 
 	@Transactional
 	public UnregisterResponseDto unregister(Member member) {
