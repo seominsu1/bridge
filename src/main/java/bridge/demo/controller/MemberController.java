@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import bridge.demo.domain.Member;
 import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
-import bridge.demo.dto.UnregisterResDto;
+import bridge.demo.dto.UnregisterResponseDto;
 import bridge.demo.service.MemberService;
 import bridge.demo.swagger.controller.MemberApiSpec;
 import jakarta.servlet.http.Cookie;
@@ -78,7 +78,7 @@ public class MemberController implements MemberApiSpec {
 			.memberId(principal.getName())
 			.password(password)
 			.build();
-		UnregisterResDto resDto = memberService.unregister(member);
+		UnregisterResponseDto resDto = memberService.unregister(member);
 		if (resDto.getStatus() == 200) {
 			Cookie cookie = new Cookie("token", null);
 			cookie.setMaxAge(0);

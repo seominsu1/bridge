@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 @Data
 @AllArgsConstructor
-public class LoginResDto {
+public class LoginResponseDto {
 	private String accessToken;
 	private String tokenType;
 	private String memberId;

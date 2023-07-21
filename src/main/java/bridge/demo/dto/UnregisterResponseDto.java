@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UnregisterResDto {
+public class UnregisterResponseDto {
 
 	private int status;
 

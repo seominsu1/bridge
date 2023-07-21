@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import bridge.demo.config.JwtTokenProvider;
 import bridge.demo.domain.Member;
-import bridge.demo.dto.UnregisterResDto;
+import bridge.demo.dto.UnregisterResponseDto;
 import bridge.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -64,8 +64,8 @@ public class MemberService {
 	// }
 
 	@Transactional
-	public UnregisterResDto unregister(Member member) {
-		UnregisterResDto resDto = new UnregisterResDto();
+	public UnregisterResponseDto unregister(Member member) {
+		UnregisterResponseDto resDto = new UnregisterResponseDto();
 		Member findOne = memberRepository.findById(member.getMemberId());
 		if (passwordEncoder.matches(member.getPassword(), findOne.getPassword())) {
 			memberRepository.unregister(findOne.getId());
