@@ -11,17 +11,18 @@ import bridge.demo.repository.memberfriend.MemberFriendsRepository;
 import java.util.List;
 import java.util.Set;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
+@Transactional
 public class MemberFriendsService {
 
     private MemberFriendsRepository memberFriendsRepository;
 
     private MemberRepository memberRepository;
 
-    public MemberFriendsService(MemberFriendsRepository memberFriendsRepository,
-        MemberRepository memberRepository) {
+    public MemberFriendsService(MemberFriendsRepository memberFriendsRepository, MemberRepository memberRepository) {
         this.memberFriendsRepository = memberFriendsRepository;
         this.memberRepository = memberRepository;
     }
@@ -82,6 +83,7 @@ public class MemberFriendsService {
     }
 
 
+    @Transactional(readOnly = true)
     public List<Member> findUser(@PathVariable String memberId) {
         checkIsValidMember(memberId);
         return memberFriendsRepository.findFriendsByMemberId(memberId);
