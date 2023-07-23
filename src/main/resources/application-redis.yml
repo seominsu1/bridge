@@ -8,8 +8,8 @@ spring:
 spring.config.activate.on-profile: dev
 spring:
   redis:
-    host:
-    port:
+    host: localhost
+    port: 6379
 ---
 spring.config.activate.on-profile: prod
 spring:
