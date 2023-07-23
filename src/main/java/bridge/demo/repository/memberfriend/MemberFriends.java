@@ -1,6 +1,7 @@
 package bridge.demo.repository.memberfriend;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class MemberFriends {
     @Id
     private String memberId;
 
-    private LinkedHashSet<String> friendIds;
+    private Set<String> friendIds;
 
     @Override
     public String toString() {
@@ -25,15 +26,13 @@ public class MemberFriends {
             '}';
     }
 
-    private MemberFriends(String memberId, Set<String> friendIds) {
+    private MemberFriends(String memberId) {
         this.memberId = memberId;
-        LinkedHashSet<String> ids = new LinkedHashSet<>();
-        friendIds.addAll(friendIds);
-        this.friendIds = ids;
+        this.friendIds = new HashSet<>();
     }
 
-    public static MemberFriends of(String memberId, Set<String> friendIds) {
-        return new MemberFriends(memberId, friendIds);
+    public static MemberFriends of(String memberId) {
+        return new MemberFriends(memberId);
     }
 
     public void addFriend(String friendId) {
@@ -42,6 +41,10 @@ public class MemberFriends {
 
     public void deleteFriend(String friendId) {
         this.friendIds.remove(friendId);
+    }
+
+    public void deleteFriends(Set<String> friendIds) {
+        this.friendIds.removeAll(friendIds);
     }
 
     public void addFriends(Set<String> friendIds) {

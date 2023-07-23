@@ -40,9 +40,15 @@ public class MemberFriendsController {
         return ResponseEntity.ok(memberResponses(memberFriendsService.findUser(memberId)));
     }
 
-    @PutMapping("/{memberId}")
+    @PutMapping("/{memberId}/add")
     public ResponseEntity addFriends(@PathVariable String memberId, @RequestBody MemberFriendsRequest request) {
         memberFriendsService.addFriends(memberId, request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{memberId}/subtract")
+    public ResponseEntity subtractFriends(@PathVariable String memberId, @RequestBody MemberFriendsRequest request) {
+        memberFriendsService.subtractFriends(memberId, request);
         return ResponseEntity.noContent().build();
     }
 
