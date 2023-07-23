@@ -18,14 +18,6 @@ public class MemberFriends {
 
     private Set<String> friendIds;
 
-    @Override
-    public String toString() {
-        return "MemberFriends{" +
-            "memberId='" + memberId + '\'' +
-            ", friendIds=" + friendIds +
-            '}';
-    }
-
     private MemberFriends(String memberId) {
         this.memberId = memberId;
         this.friendIds = new HashSet<>();
@@ -48,8 +40,6 @@ public class MemberFriends {
     }
 
     public void addFriends(Set<String> friendIds) {
-        System.out.println(this.friendIds);
         this.friendIds.addAll(friendIds);
-        System.out.println(friendIds + "this" + this.friendIds);
     }
 }
