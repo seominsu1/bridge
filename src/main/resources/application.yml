@@ -1,2 +1,30 @@
 spring:
   datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://bridgedb.cae195iepgm5.ap-northeast-2.rds.amazonaws.com:3306/bridge?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+    username: ${jdbc_username}
+    password: ${jdbc_password}
+  jpa:
+    database: mysql
+    show-sql: true #hibernate가 실행한 모든 sql 출력
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        ddl-auto: true
+        format-sql: true #sql 문 beautify
+
+# Swagger springdoc-ui Configuration
+springdoc:
+  packages-to-scan: bridge.demo
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: swagger-ui.html
+    tags-sorter: alpha            # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+    operations-sorter: alpha      # alpha: 알파벳 순 태그 정렬, method: HTTP Method 순 정렬
+  api-docs:
+    groups:
+      enabled: true
+  cache:
+    disabled: true
