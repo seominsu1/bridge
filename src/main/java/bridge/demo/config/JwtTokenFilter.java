@@ -64,7 +64,8 @@ public class JwtTokenFilter extends GenericFilterBean {
 			bearerToken = tokenInCookie;
 		}
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-			return bearerToken.replaceFirst("Bearer ", "");
+			return bearerToken.replaceFirst("Bearer\\+", "");
+
 		}
 		return null;
 	}
