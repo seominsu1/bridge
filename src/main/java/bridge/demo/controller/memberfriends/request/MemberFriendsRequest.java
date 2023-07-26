@@ -7,8 +7,7 @@ import lombok.Getter;
 @Getter
 public class MemberFriendsRequest {
 
-    @Nullable
-    private String memberId;
+	private String memberId;
 
-    private Set<String> friendIds;
+	private Set<String> friendIds;
 }

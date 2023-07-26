@@ -8,7 +8,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface MemberFriendsRepository extends MongoRepository<MemberFriends, String>, CustomMemberFriendsRepository {
 
-    Optional<MemberFriends> findById(String id);
-    Boolean existsByMemberId(String memberId);
-    List<MemberFriends> findAllByMemberIdIn(Set<String> memberIds);
+	Optional<MemberFriends> findById(String id);
+
+	Boolean existsByMemberId(String memberId);
+
+	List<MemberFriends> findAllByMemberIdIn(Set<String> memberIds);
 }

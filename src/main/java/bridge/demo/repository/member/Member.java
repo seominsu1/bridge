@@ -1,22 +1,47 @@
 package bridge.demo.repository.member;
 
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "member")
 @Getter
 public class Member {
 
-    @Id
-    private String memberId;
-    private String email;
-    private String name;
+	@Id
+	private ObjectId id;
 
+	@NotNull
+	@Indexed(unique = true)
+	private String memberId;
 
-    public Member(String memberId, String email, String name) {
-        this.memberId = memberId;
-        this.email = email;
-        this.name = name;
-    }
+	@NotNull
+	private String password;
+
+	@NotNull
+	@Indexed(unique = true)
+	private String email;
+
+	private String token;
+
+	private String created;
+
+	private String role;
+
+	@Builder
+	public Member(String memberId, String password, String email, String token, String created, String role) {
+		this.memberId = memberId;
+		this.password = password;
+		this.email = email;
+		this.token = token;
+		this.created = created;
+		this.role = role;
+	}
+
+	public Member() {
+	}
 }

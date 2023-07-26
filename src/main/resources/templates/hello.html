@@ -1,10 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Hello</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Hello!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<p th:text="'hello. ' + ${name}" >안녕하세요.</p>
+<p th:text="'hello. ' + ${memberId}"></p>
+<form th:action="@{/member/logout}" , method="post">
+    <button>로그아웃</button>
+</form>
+<a href="/member/unregister" methods="get">회원탈퇴</a>>
 </body>
 </html>

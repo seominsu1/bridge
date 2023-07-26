@@ -2,21 +2,22 @@ package bridge.demo.controller.memberfriends.response;
 
 import bridge.demo.repository.member.Member;
 import lombok.Getter;
+import org.bson.types.ObjectId;
 
 @Getter
 public class MemberFriendResponse {
 
-    private String id;
-    private String email;
-    private String name;
+	private ObjectId id;
+	private String memberId;
+	private String email;
 
-    private MemberFriendResponse(String id, String email, String name) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-    }
+	private MemberFriendResponse(ObjectId id, String email, String name) {
+		this.id = id;
+		this.email = email;
+		this.memberId = name;
+	}
 
-    public static MemberFriendResponse of(Member member) {
-        return new MemberFriendResponse(member.getMemberId(), member.getEmail(), member.getName());
-    }
+	public static MemberFriendResponse of(Member member) {
+		return new MemberFriendResponse(member.getId(), member.getEmail(), member.getMemberId());
+	}
 }
