@@ -1,3 +1,15 @@
+buildscript {
+    ext {
+        springBootVersion = '3.1.0'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}'
+        classpath 'io.spring.gradle:dependency-management-plugin:1.1.0'
+    }
+}
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.0'
@@ -24,43 +36,93 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 //checkstyle settings end
 
-group = 'bridge'
-version = '0.0.1-SNAPSHOT'
-
-java {
-    sourceCompatibility = '17'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+/*
+root 프로젝트 포함 하위 모듈들 공통 적용사항
+* */
+allprojects {
+    repositories {
+        mavenCentral()
     }
 }
 
-repositories {
-    mavenCentral()
+/*
+root 프로젝트 하위 모듈들 공통 적용사항
+* */
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.ec4j.editorconfig'
+    apply plugin: 'checkstyle'
+
+    //checkstyle config start
+    editorconfig {
+        excludes = ['build']
+    }
+
+    check.dependsOn editorconfigCheck
+
+    checkstyle {
+        maxWarnings = 0
+        configFile = file("${rootDir}/config/naver-checkstyle-rules.xml")
+        configProperties = ["suppressionFile": "${rootDir}/config/naver-checkstyle-suppressions.xml"]
+        toolVersion = "8.42"
+    }
+
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+    //checkstyle config end
+
+    group = 'bridge'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '17'
+
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+    dependencies {
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+
+        implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+        implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
+        implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
+        implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
+
+        //swagger
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+        compileOnly 'org.projectlombok:lombok'
+        runtimeOnly 'com.h2database:h2'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
-    implementation 'mysql:mysql-connector-java:8.0.33'
-    //spring security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    //jwt token
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    //swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+bootJar { enabled = false } // main()으로 실행시키지 않는 모듈
+jar { enabled = true }//다른 모듈에서 의존 가능
+
+/*
+core 모듈
+* */
+project(':core') {
+    bootJar { enabled = false }
+    jar { enabled = true }
 }
-tasks.named('test') {
-    useJUnitPlatform()
+
+/*
+web 모듈
+* */
+project(':web') {
+    bootJar { enabled = true }
+    jar { enabled = false }
 }

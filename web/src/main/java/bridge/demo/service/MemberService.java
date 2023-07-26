@@ -6,7 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import bridge.demo.domain.Member;
+import bridge.demo.common.entity.Member;
 import bridge.demo.dto.UnregisterResponseDto;
 import bridge.demo.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
