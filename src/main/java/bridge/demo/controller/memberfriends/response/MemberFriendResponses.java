@@ -14,6 +14,8 @@ public class MemberFriendResponses {
         this.totalElement = totalElement;
     }
 
+
+
     public static MemberFriendResponses of(List<MemberFriendResponse> friends, Integer totalElement) {
         return new MemberFriendResponses(friends, totalElement);
     }
