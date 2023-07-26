@@ -1,4 +1,4 @@
-package bridge.demo.domain;
+package bridge.demo.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

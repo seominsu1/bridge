@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import bridge.demo.domain.Member;
+import bridge.demo.common.entity.Member;
 import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.dto.UnregisterResponseDto;
