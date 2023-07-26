@@ -1,4 +1,4 @@
-package bridge.demo.controller;
+package bridge.demo.controller.member;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import bridge.demo.domain.Member;
+import bridge.demo.repository.member.Member;
 import bridge.demo.dto.MemberFormDto;
 import bridge.demo.dto.MemberLoginDto;
 import bridge.demo.dto.UnregisterResponseDto;
 import bridge.demo.service.MemberService;
-import bridge.demo.swagger.controller.MemberApiSpec;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,7 @@ public class MemberController implements MemberApiSpec {
 			.build();
 		try {
 			memberService.save(member);
-			model.addAttribute("member_id", member.getMemberId());
+			model.addAttribute("member_id", member.getId());
 			return "member/success";
 		} catch (IllegalStateException e) {
 			log.info(e.getMessage());

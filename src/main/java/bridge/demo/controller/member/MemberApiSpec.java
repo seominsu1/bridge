@@ -1,4 +1,4 @@
-package bridge.demo.swagger.controller;
+package bridge.demo.controller.member;
 
 import java.security.Principal;
 

@@ -1,49 +1,58 @@
 package bridge.demo.service;
 
-import java.util.List;
-
+import bridge.demo.repository.member.MemberRepository;
+import org.bson.types.ObjectId;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import bridge.demo.domain.Member;
+import bridge.demo.repository.member.Member;
 import bridge.demo.dto.UnregisterResponseDto;
-import bridge.demo.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 @Log4j2
 public class MemberService {
 
 	private final MemberRepository memberRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 
+	public MemberService(MemberRepository memberRepository, BCryptPasswordEncoder passwordEncoder) {
+		this.memberRepository = memberRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
+
 	@Transactional
 	public void save(Member member) throws IllegalStateException {
-		try {
-			validateDuplicatedId(member);
-		} catch (IllegalStateException e) {
-			log.info(e.getMessage());
-			throw e;
-		}
+		checkIsValidMemberRequest(member);
 		Member newMember = passwordEncode(member);
 		memberRepository.save(newMember);
 	}
 
-	public Member findOne(String memberId) {
-		Member member = memberRepository.findById(memberId);
-		return member;
+	private void checkIsValidMemberRequest(Member member) {
+		checkIsValidEmail(member.getEmail());
+		checkIsValidMemberId(member.getMemberId());
+	}
+
+	private void checkIsValidEmail(String email) {
+		if (memberRepository.existsByEmail(email)) {
+			throw new IllegalStateException("중복된 이메일 입니다.");
+		}
+	}
+
+	private void checkIsValidMemberId(String memberId) {
+		if (memberRepository.existsByMemberId(memberId)) {
+			throw new IllegalStateException("중복된 ID 입니다.");
+		}
 	}
 
 	@Transactional
-	public UnregisterResponseDto unregister(Member member) {
+	public UnregisterResponseDto unregister(Member request) {
 		UnregisterResponseDto resDto = new UnregisterResponseDto();
-		Member findOne = memberRepository.findById(member.getMemberId());
-		if (passwordEncoder.matches(member.getPassword(), findOne.getPassword())) {
-			memberRepository.unregister(findOne.getId());
+		Member member = findByMemberId(request.getMemberId());
+		if (passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+			memberRepository.deleteById(member.getId());
 			resDto.setMessage("회원탈퇴를 성공적으로 처리했습니다.");
 			resDto.setStatus(200);
 		} else {
@@ -53,16 +62,25 @@ public class MemberService {
 		return resDto;
 	}
 
-	private void validateDuplicatedId(Member member) {
 
-		List<Member> membersEmail = memberRepository.findByEmail(member.getEmail());
-		List<Member> membersId = memberRepository.findMembers(member.getMemberId());
-		if (!membersEmail.isEmpty()) {
-			throw new IllegalStateException("이미 가입된 회원입니다.");
-		} else if (!membersId.isEmpty()) {
-			throw new IllegalStateException("중복된 ID 입니다.");
-		}
+	public Member findById(ObjectId id) {
+		Member member = memberRepository.findById(id)
+			.orElseThrow(() -> new RuntimeException("member not found exception."));
+		return member;
 	}
+
+	public Member findByMemberId(String memberId) {
+		Member member = memberRepository.findByMemberId(memberId)
+			.orElseThrow(() -> new RuntimeException("member not found exception."));
+		return member;
+	}
+
+	public Member findByEmail(String email) {
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new RuntimeException("member not found exception."));
+		return member;
+	}
+
 
 	private Member passwordEncode(Member member) {
 		String encodedPw = passwordEncoder.encode(member.getPassword());

@@ -1,6 +1,6 @@
 package bridge.demo.config;
 
-import java.util.Optional;
+import bridge.demo.repository.member.MemberRepository;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import bridge.demo.domain.Member;
-import bridge.demo.repository.MemberRepository;
+import bridge.demo.repository.member.Member;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,9 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String insertedUserId) throws UsernameNotFoundException {
-		Optional<Member> findOne = Optional.ofNullable(memberRepository.findById(insertedUserId));
-		Member member = findOne.orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다."));
-
+		Member member = memberRepository.findByMemberId(insertedUserId).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다."));
 		return User.builder()
 			.username(member.getMemberId())
 			.password(member.getPassword())

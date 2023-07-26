@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Component
 public class CustomLogoutHandler implements LogoutHandler {
+
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 		Cookie cookie = new Cookie("token", null);
